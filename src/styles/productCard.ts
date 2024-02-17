@@ -1,14 +1,41 @@
-import styled from "styled-components";
-import { Card, Typography, TypographyProps } from "@mui/material";
+import styled, { CSSObject } from "styled-components";
+import {
+  Card,
+  Grid,
+  GridProps,
+  Typography,
+  TypographyProps,
+} from "@mui/material";
 
 export const StyledCard = styled(Card)`
   margin-bottom: 20px;
+  width: 345px;
+  height: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
 `;
 
 export const ProductImage = styled.img`
   width: 100%;
-  max-height: 200px;
+  max-height: 140px;
   object-fit: cover;
+`;
+
+interface StyledGridProps extends GridProps {
+  justifyContent?: CSSObject["justifyContent"];
+  marginTop?: string;
+  itemMargin?: string;
+  spacing?: string;
+}
+
+export const StyledGrid = styled(Grid)<StyledGridProps>`
+  && {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: ${(props) => props.justifyContent || "space-around"};
+    margin-top: ${(props) => props.marginTop || "20px"};
+  }
 `;
 
 export const ProductTitle = styled(Typography).attrs(

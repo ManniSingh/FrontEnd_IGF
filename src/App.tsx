@@ -1,7 +1,7 @@
 import React from "react";
 import { useGetProductsQuery } from "./services/api";
-import { Grid } from "@mui/material";
 import ProductCard from "./components/ProductCard";
+import { StyledGrid } from "./styles/productCard";
 
 function App() {
   const { isUninitialized, isLoading, isError, data } = useGetProductsQuery();
@@ -20,13 +20,11 @@ function App() {
 
   return (
     <div>
-      <Grid container spacing={3}>
+      <StyledGrid>
         {data.products.map((product: any) => (
-          <Grid item key={product.id} xs={12} sm={6} md={4}>
-            <ProductCard product={product} />
-          </Grid>
+          <ProductCard key={product.id} product={product} />
         ))}
-      </Grid>
+      </StyledGrid>
     </div>
   );
 }
