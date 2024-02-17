@@ -6,7 +6,7 @@ import {
   ProductTitle,
   ProductDescription,
   ProductPrice,
-} from "../styles/productCard";
+} from "../styles/products";
 import { ProductCardProps } from "../types/ProductTypes";
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {

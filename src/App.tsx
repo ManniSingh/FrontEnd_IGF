@@ -1,7 +1,7 @@
 import React from "react";
 import { useGetProductsQuery } from "./services/api";
 import ProductCard from "./components/ProductCard";
-import { StyledGrid } from "./styles/productCard";
+import { StyledGrid } from "./styles/products";
 
 function App() {
   const { isUninitialized, isLoading, isError, data } = useGetProductsQuery();
