@@ -14,8 +14,8 @@ function Products() {
     return <p>ERROR!!</p>;
   }
 
-  console.log("Type of data:", typeof data);
-  console.log("Data:", data);
+  // console.log("Type of data:", typeof data);
+  // console.log("Data:", data);
 
   return (
     <div>

@@ -1,6 +1,6 @@
 import { Toolbar } from "@mui/material";
 import { Link } from "react-router-dom";
-import { RootAppBar, RootTypography, RootLinkButton } from "../styles/root";
+import { RootAppBar, RootTypography, RootLinkButton } from "../../styles/root";
 
 export function NavigationBar() {
     return (

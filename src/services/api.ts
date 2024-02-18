@@ -42,7 +42,37 @@ export const api = createApi({
         }
       `,
     }),
+    register: builder.mutation({
+      query: ({ name, email, password, avatar }) => gql`
+        mutation {
+          addUser(
+            data: {
+              name: "${name}"
+              email: "${email}"
+              password: "${password}"
+              avatar: "${avatar}"
+            }
+          ) {
+            id
+            name
+            avatar
+          }
+        }
+      `,
+    }),
+    isEmailAvailable: builder.query({
+      query: (email) => gql`
+        query {
+          isAvailable(email: "${email}")
+        }
+      `,
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useLoginMutation } = api;
+export const {
+  useGetProductsQuery,
+  useLoginMutation,
+  useRegisterMutation,
+  useIsEmailAvailableQuery,
+} = api;

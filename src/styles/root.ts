@@ -1,5 +1,5 @@
 import { AppBar, Button, Typography } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from '@mui/system';
 
 interface AppBarProps {
   backgroundColor?: string;
