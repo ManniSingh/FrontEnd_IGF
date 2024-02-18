@@ -1,13 +1,7 @@
 import React from "react";
 import { CardContent } from "@mui/material";
-import {
-  StyledCard,
-  ProductImage,
-  ProductTitle,
-  ProductDescription,
-  ProductPrice,
-} from "../styles/products";
-import { ProductCardProps } from "../types/ProductTypes";
+import { StyledCard, ProductImage, ProductTitle, ProductDescription, ProductPrice } from "../../styles/products";
+import { ProductCardProps } from "../../types/ProductTypes";
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
