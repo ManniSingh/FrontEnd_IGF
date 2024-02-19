@@ -6,7 +6,7 @@ interface AppBarProps {
 }
 
 export const RootAppBar = styled(AppBar)<AppBarProps>`
-  background-color: ${(props) => props.backgroundColor || '#333'};
+  background-color: ${(props) => props.backgroundColor || 'blue'};
 `;
 
 export const RootTypography = styled(Typography)`

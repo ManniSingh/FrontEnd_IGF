@@ -5,9 +5,16 @@ const endpoint = "https://api.escuelajs.co/graphql";
 
 export const api = createApi({
   reducerPath: "api",
-  baseQuery: async (arg) => {
+  baseQuery: async (arg, api, extraOptions) => {
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    };
     try {
-      const data = await request(endpoint, arg);
+      const data = await request({
+        url:endpoint, 
+        document:arg, 
+        requestHeaders: headers,
+      });
       return { data };
     } catch (error) {
       return { error };
@@ -67,6 +74,17 @@ export const api = createApi({
         }
       `,
     }),
+    getUserProfile: builder.query({
+      query: () => gql`
+        query {
+          myProfile {
+            id
+            name
+            avatar
+          }
+        }
+      `,
+    }),
   }),
 });
 
@@ -75,4 +93,5 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useIsEmailAvailableQuery,
+  useGetUserProfileQuery,
 } = api;

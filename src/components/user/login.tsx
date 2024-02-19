@@ -1,4 +1,8 @@
 import { useForm } from "react-hook-form";
+import { Grid, Link } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
+
 import { useLoginMutation } from "../../services/api";
 import {
   FormContainer,
@@ -6,21 +10,28 @@ import {
   InputField,
   SubmitButton,
   ErrorMessage,
-  SuccessMessage,
 } from "../../styles/login";
 import { LoginFormValues } from "../../types/userTypes";
-import { Grid, Link } from "@mui/material";
+
+
 
 function LoginForm() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>();
-  const [login, { isLoading, isError, error, data }] = useLoginMutation();
+  const [login, { isLoading, isError, error}] = useLoginMutation();
 
   const onSubmit = async (formData: LoginFormValues) => {
-    await login(formData);
+    const response = await login(formData);
+    if ("data" in response && "login" in response.data) {
+      localStorage.setItem("access_token", response.data.login.access_token);
+      localStorage.setItem("refresh_token", response.data.login.refresh_token);
+      //console.log("token added");
+      navigate("/");
+    }
   };
 
   return (
@@ -56,13 +67,6 @@ function LoginForm() {
       </Grid>
 
       {isError && <ErrorMessage>Error: {JSON.stringify(error)}</ErrorMessage>}
-      {data && (
-        <SuccessMessage>
-          Access Token: {data.login.access_token}
-          <br />
-          Refresh Token: {data.login.refresh_token}
-        </SuccessMessage>
-      )}
     </FormContainer>
   );
 }
