@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import { Grid, Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 
-import { useLoginMutation } from "../../services/api";
+import { useGetUserProfileQuery, useLoginMutation } from "../../services/api";
 import {
   FormContainer,
   FormTitle,
@@ -12,24 +13,28 @@ import {
   ErrorMessage,
 } from "../../styles/login";
 import { LoginFormValues } from "../../types/userTypes";
-
+import { setUser } from "../../redux/slices/userSlice";
 
 
 function LoginForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>();
   const [login, { isLoading, isError, error}] = useLoginMutation();
+  const { data: userData, isLoading: isUserLoading, isError: isLadingError, error: profileError, refetch } = useGetUserProfileQuery({});
 
   const onSubmit = async (formData: LoginFormValues) => {
     const response = await login(formData);
     if ("data" in response && "login" in response.data) {
       localStorage.setItem("access_token", response.data.login.access_token);
       localStorage.setItem("refresh_token", response.data.login.refresh_token);
-      //console.log("token added");
+      await refetch();
+      //console.log(userData.myProfile);
+      dispatch(setUser(userData.myProfile));
       navigate("/");
     }
   };

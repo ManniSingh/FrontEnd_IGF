@@ -9,4 +9,10 @@ export interface LoginFormValues {
     password: string;
     confirmPassword: string;
   }
+
+export interface User {
+    id: string;
+    name: string;
+    avatar: string;
+  }
   

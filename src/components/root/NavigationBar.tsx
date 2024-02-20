@@ -1,26 +1,17 @@
-import {
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-  Avatar,
-  Tooltip,
-} from "@mui/material";
+import { Box, IconButton, Menu, Toolbar, Avatar, Tooltip } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { RootAppBar, RootTypography } from "../../styles/root";
-
-const pagePaths = {
-  Products: "/",
-  Login: "/login",
-};
-const settings = ["Profile", "Logout"];
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import NavigationMenuItem from "./MenuItem";
+import { setUser } from "../../redux/slices/userSlice";
 
 export function NavigationBar() {
+  const dispatch = useDispatch();
+  const userData = useSelector((state: RootState) => state.user.user);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -36,6 +27,14 @@ export function NavigationBar() {
   };
 
   const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    //console.log("storage cleared!");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    dispatch(setUser(null));
     setAnchorElUser(null);
   };
 
@@ -69,18 +68,18 @@ export function NavigationBar() {
           open={Boolean(anchorElNav)}
           onClose={handleCloseNavMenu}
         >
-          {Object.entries(pagePaths).map(([page, path]) => (
-            <MenuItem key={page} onClick={handleCloseNavMenu}>
-              <Link
-                to={path}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <Typography variant="body1" textAlign="center">
-                  {page}
-                </Typography>
-              </Link>
-            </MenuItem>
-          ))}
+          <NavigationMenuItem
+            page="Products"
+            path="/"
+            handleCloseNavMenu={handleCloseNavMenu}
+          />
+          {!userData && (
+            <NavigationMenuItem
+              page="Login"
+              path="/login"
+              handleCloseNavMenu={handleCloseNavMenu}
+            />
+          )}
         </Menu>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <RootTypography variant="h6" noWrap>
@@ -89,54 +88,54 @@ export function NavigationBar() {
         </Link>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          {Object.entries(pagePaths).map(([page, path]) => (
-            <MenuItem key={page} onClick={handleCloseNavMenu}>
-              <Link
-                to={path}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <Typography variant="body1" textAlign="center">
-                  {page}
-                </Typography>
-              </Link>
-            </MenuItem>
-          ))}
+          <NavigationMenuItem
+            page="Products"
+            path="/"
+            handleCloseNavMenu={handleCloseNavMenu}
+          />
+          {!userData && (
+            <NavigationMenuItem
+              page="Login"
+              path="/login"
+              handleCloseNavMenu={handleCloseNavMenu}
+            />
+          )}
         </Box>
-        <Box>
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-            {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Link
-                  to={setting}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  <Typography variant="body1" textAlign="center">
-                    {setting}
-                  </Typography>
-                </Link>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box>
+        {userData && (
+          <Box>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt={userData?.name} src={userData?.avatar} />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <NavigationMenuItem
+                page="Profile"
+                path="/profile"
+                handleCloseNavMenu={handleCloseUserMenu}
+              />
+              <NavigationMenuItem
+                page="Logout"
+                path="/"
+                handleCloseNavMenu={handleLogout}
+              />
+            </Menu>
+          </Box>
+        )}
       </Toolbar>
     </RootAppBar>
   );
