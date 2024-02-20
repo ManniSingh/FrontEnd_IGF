@@ -1,24 +1,10 @@
-import React, { useEffect } from "react";
-import { Avatar, Typography, Grid, LinearProgress } from "@mui/material";
-import { useGetUserProfileQuery } from "../../services/api";
+import { Avatar, Typography, Grid} from "@mui/material";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 const UserProfilePage = () => {
-  const { data, isLoading, isError, refetch } = useGetUserProfileQuery({});
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
-
-  if (isLoading) {
-    return <LinearProgress />;
-  }
-
-  if (isError) {
-    return <div>Error fetching user profile data</div>;
-  }
-
-  const { id, name, avatar } = data.myProfile;
-
+  const userData = useSelector((state: RootState) => state.user.user);
+  if(!userData) return(<p>User data doesn't exist</p>);
   return (
     <Grid container justifyContent="center" alignItems="center">
       <Grid item xs={12} sm={6}>
@@ -27,11 +13,11 @@ const UserProfilePage = () => {
         </Typography>
         <Grid container spacing={2} justifyContent="center">
           <Grid item>
-            <Avatar alt="User Avatar" src={avatar} />
+            <Avatar alt="User Avatar" src={userData?.avatar} />
           </Grid>
           <Grid item>
-            <Typography variant="h6">{name}</Typography>
-            <Typography variant="body1">User ID: {id}</Typography>
+            <Typography variant="h6">{userData?.name}</Typography>
+            <Typography variant="body1">User ID: {userData?.id}</Typography>
           </Grid>
         </Grid>
       </Grid>

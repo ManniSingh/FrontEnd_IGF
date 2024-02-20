@@ -2,9 +2,12 @@ import { LinearProgress } from "@mui/material";
 import { useGetProductsQuery } from "../../services/api";
 import { StyledGrid } from "../../styles/products";
 import ProductCard from "./ProductCard";
+import { useDispatch } from "react-redux";
+import { setProducts } from "../../redux/slices/productSlice";
 
 function Products() {
   const { isUninitialized, isLoading, isError, data } = useGetProductsQuery({});
+  const dispatch = useDispatch();
 
   if (isLoading || isUninitialized) {
     return <LinearProgress />;
@@ -14,9 +17,9 @@ function Products() {
     return <p>ERROR!!</p>;
   }
 
-  // console.log("Type of data:", typeof data);
-  // console.log("Data:", data);
-
+  if(data){
+      dispatch(setProducts(data.products));
+  }
   return (
     <div>
       <StyledGrid>

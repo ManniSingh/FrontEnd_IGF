@@ -33,8 +33,9 @@ function LoginForm() {
       localStorage.setItem("access_token", response.data.login.access_token);
       localStorage.setItem("refresh_token", response.data.login.refresh_token);
       await refetch();
-      //console.log(userData.myProfile);
-      dispatch(setUser(userData.myProfile));
+      if(userData){
+        dispatch(setUser(userData.myProfile));
+      }
       navigate("/");
     }
   };

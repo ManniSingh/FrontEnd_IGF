@@ -1,17 +1,22 @@
 import { Box, IconButton, Menu, Toolbar, Avatar, Tooltip } from "@mui/material";
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { RootAppBar, RootTypography } from "../../styles/root";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import NavigationMenuItem from "./MenuItem";
 import { setUser } from "../../redux/slices/userSlice";
+import { sortProductsByPrice } from "../../redux/slices/productSlice";
 
 export function NavigationBar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userData = useSelector((state: RootState) => state.user.user);
+  const sorted = useSelector((state: RootState) => state.product.sorted);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -28,6 +33,11 @@ export function NavigationBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleSort = () => {
+    dispatch(sortProductsByPrice());
+    navigate("/sorted");
   };
 
   const handleLogout = () => {
@@ -87,6 +97,9 @@ export function NavigationBar() {
           </RootTypography>
         </Link>
         <Box sx={{ flexGrow: 1 }} />
+        <IconButton size="large" onClick={handleSort}>
+          {sorted !== 1 ? <ArrowDownwardIcon color="primary"/> : <ArrowUpwardIcon color = "primary"/>}
+        </IconButton>
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
           <NavigationMenuItem
             page="Products"
