@@ -24,9 +24,6 @@ const productSlice = createSlice({
       state.selectedProduct =
         state.products.find((product) => product.id === action.payload) || null;
     },
-    filterProductsByCategory(state, action: PayloadAction<string>) {
-      state.products = state.products.filter(product => product.category.name === action.payload);
-    },
     sortProductsByPrice(state) {
       if (state.sorted !== 1) {
         state.products.sort((a, b) => a.price - b.price);
@@ -40,6 +37,6 @@ const productSlice = createSlice({
 });
 
 const productReducer = productSlice.reducer;
-export const { setProducts, selectProduct, sortProductsByPrice, filterProductsByCategory } =
+export const { setProducts, selectProduct, sortProductsByPrice} =
   productSlice.actions;
 export default productReducer;

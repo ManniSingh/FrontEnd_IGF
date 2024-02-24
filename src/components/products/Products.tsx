@@ -19,7 +19,9 @@ function Products() {
   if(data){
       dispatch(setProducts(data.products));
   }
-  return <ProductGrid products={data.products} />;
+  return (
+  <ProductGrid products={data.products} />
+  );
 }
 
 export default Products;

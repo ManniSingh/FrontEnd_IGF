@@ -8,6 +8,7 @@ import ProductGrid from './components/products/ProductGrid';
 import { useSelector } from 'react-redux';
 import { RootState } from './redux/store';
 import HorizontalScrollableChips from './components/products/Categories';
+import ProductDetail from './components/products/ProductDetail';
 
 function App() {
   const products = useSelector((state: RootState) => state.product.products);
@@ -20,6 +21,7 @@ function App() {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/" element={<Products />} />
+        <Route path="/product" element={<ProductDetail />} />
         <Route path="/alt" element={<ProductGrid products={products} />} />
         <Route path="/profile" element={<UserProfilePage />} />
       </Routes>

@@ -19,7 +19,8 @@ const HorizontalScrollableChips: React.FC = () => {
     return <LinearProgress />;
   }
 
-  const chips = data.categories.map((item: { name: string }) => item.name);
+  const chips = data.categories.map((item: { name: string }) => item.name)
+  .filter((chip: string, index: number, array: string[]) => array.indexOf(chip) === index);
 
   const handleClick = (chip: string) => {
 
