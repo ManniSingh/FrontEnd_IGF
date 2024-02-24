@@ -1,9 +1,8 @@
 import { LinearProgress } from "@mui/material";
 import { useGetProductsQuery } from "../../services/api";
-import { StyledGrid } from "../../styles/products";
-import ProductCard from "./ProductCard";
 import { useDispatch } from "react-redux";
 import { setProducts } from "../../redux/slices/productSlice";
+import ProductGrid from "./ProductGrid";
 
 function Products() {
   const { isUninitialized, isLoading, isError, data } = useGetProductsQuery({});
@@ -20,15 +19,7 @@ function Products() {
   if(data){
       dispatch(setProducts(data.products));
   }
-  return (
-    <div>
-      <StyledGrid>
-        {data.products.map((product: any) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </StyledGrid>
-    </div>
-  );
+  return <ProductGrid products={data.products} />;
 }
 
 export default Products;

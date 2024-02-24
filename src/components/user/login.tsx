@@ -34,6 +34,7 @@ function LoginForm() {
       localStorage.setItem("refresh_token", response.data.login.refresh_token);
       await refetch();
       if(userData){
+        console.log(userData);
         dispatch(setUser(userData.myProfile));
       }
       navigate("/");

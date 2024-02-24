@@ -37,7 +37,7 @@ export function NavigationBar() {
 
   const handleSort = () => {
     dispatch(sortProductsByPrice());
-    navigate("/sorted");
+    navigate("/alt");
   };
 
   const handleLogout = () => {

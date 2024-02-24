@@ -39,6 +39,15 @@ export const api = createApi({
         }
       `,
     }),
+    getCategories: builder.query({
+      query: () => gql`
+        query {
+          categories {
+            name
+          }
+        }
+      `,
+    }),
     login: builder.mutation({
       query: ({ email, password }) => gql`
         mutation {
@@ -79,8 +88,10 @@ export const api = createApi({
         query {
           myProfile {
             id
+            email
             name
             avatar
+            role
           }
         }
       `,
@@ -90,6 +101,7 @@ export const api = createApi({
 
 export const {
   useGetProductsQuery,
+  useGetCategoriesQuery,
   useLoginMutation,
   useRegisterMutation,
   useIsEmailAvailableQuery,

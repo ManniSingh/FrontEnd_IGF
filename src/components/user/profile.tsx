@@ -17,7 +17,8 @@ const UserProfilePage = () => {
           </Grid>
           <Grid item>
             <Typography variant="h6">{userData?.name}</Typography>
-            <Typography variant="body1">User ID: {userData?.id}</Typography>
+            <Typography variant="body1">email: {userData?.email}</Typography>
+            <Typography variant="body1">role: {userData?.role}</Typography>
           </Grid>
         </Grid>
       </Grid>
