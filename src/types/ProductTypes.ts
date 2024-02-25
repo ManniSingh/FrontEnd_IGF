@@ -7,6 +7,10 @@ export interface Product {
   category: Category;
 }
 
+export interface Cart extends Product{
+  amount:number;
+}
+
 interface Category {
   id:string;
   name:string;

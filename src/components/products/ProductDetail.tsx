@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { IconButton, Typography } from "@mui/material";
+import { IconButton, LinearProgress, Typography } from "@mui/material";
 import { Product } from "../../types/ProductTypes"; // Assuming Product is the type of product
 import { RootState } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ const ProductDetail: React.FC = () => {
     const navigate = useNavigate();
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <LinearProgress />;
   }
 
   return (

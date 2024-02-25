@@ -49,7 +49,7 @@ export function NavigationBar() {
   };
 
   return (
-    <RootAppBar position="static">
+    <RootAppBar position="fixed">
       <Toolbar disableGutters>
         <IconButton
           size="large"

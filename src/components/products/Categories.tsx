@@ -6,6 +6,8 @@ import { useDispatch} from 'react-redux';
 import { Product } from '../../types/ProductTypes';
 import { setProducts } from '../../redux/slices/productSlice';
 import { useNavigate } from 'react-router-dom';
+import containerStyles from '../../styles/container';
+import StyledContainer from '../../styles/container';
 
 const HorizontalScrollableChips: React.FC = () => {
 //   const products: Product[] = useSelector((state: RootState) => state.product.products);
@@ -32,7 +34,6 @@ const HorizontalScrollableChips: React.FC = () => {
       updatedSelectedChips = [...selectedChips, chip];
     }
     setSelectedChips(updatedSelectedChips);
-    console.log("chips:",updatedSelectedChips);
     if (updatedSelectedChips.length>0){
         let filteredProducts = prodData.products;
         for (const selectedChip of updatedSelectedChips) {
@@ -47,7 +48,7 @@ const HorizontalScrollableChips: React.FC = () => {
   };
 
   return (
-    <Container>
+    <StyledContainer>
       {chips.map((chip: string, index: number) => (
         <Chip
           key={index}
@@ -57,7 +58,7 @@ const HorizontalScrollableChips: React.FC = () => {
           style={{ marginRight: 8, marginBottom: 8 }}
         />
       ))}
-    </Container>
+    </StyledContainer>
   );
 };
 

@@ -14,6 +14,13 @@ export const StyledCard = styled(Card)`
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   overflow: hidden;
+  position: relative;
+`;
+
+export const IconButtonContainer = styled.div`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 `;
 
 export const ProductImage = styled.img`
