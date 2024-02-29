@@ -32,18 +32,21 @@ function RegisterForm() {
     },
   ] = useRegisterMutation();
   const [skip, setSkip] = useState(true);
-  const [email, setEmail] = useState('');
-  const { data: emailData, refetch: recheckEmail } = useIsEmailAvailableQuery(email, {skip});
+  const [email, setEmail] = useState("");
+  const { data: emailData, refetch: recheckEmail } = useIsEmailAvailableQuery(
+    email,
+    { skip }
+  );
 
   useEffect(() => {
     const fetchData = async () => {
       await recheckEmail();
     };
-    if (email !== '') {
+    if (email !== "") {
       fetchData();
     }
   }, [email, recheckEmail]);
-  
+
   // submitter
   const onSubmit = async (formData: LoginFormValues) => {
     if (isRegistering) return;
@@ -52,18 +55,18 @@ function RegisterForm() {
       alert("Passwords do not match");
       return;
     }
-    setEmail(formData.email); 
+    setEmail(formData.email);
     setSkip(false);
-    console.log("EMAIL:",emailData !== null,emailData);
-    if (emailData && emailData.isAvailable){
+    console.log("EMAIL:", emailData !== null, emailData);
+    if (emailData && emailData.isAvailable) {
       alert("Email is already registered");
       return;
-    }else{
+    } else {
       await registerUser({
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        avatar: "https://api.lorem.space/image/face?w=150&h=220"
+        avatar: "https://api.lorem.space/image/face?w=150&h=220",
       });
     }
   };
@@ -75,48 +78,78 @@ function RegisterForm() {
       <InputField
         label="Name"
         type="text"
-        {...register('name', { required: true })}
+        {...register("name", { required: true })}
         error={!!errors.name}
-        helperText={errors.name ? 'Name is required' : ''}
+        helperText={errors.name ? "Name is required" : ""}
       />
 
       <InputField
         label="Email"
         type="email"
-        {...register('email', { required: true })}
+        {...register("email", {
+          required: "Email is required",
+          pattern: {
+            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            message: "Please enter a valid email address",
+          },
+        })}
         error={!!errors.email}
-        helperText={errors.email ? 'Email is required' : ''}
+        helperText={errors.email ? errors.email.message : ""}
       />
 
       <InputField
         label="Password"
         type="password"
-        {...register('password', { required: true })}
+        {...register("password", {
+          required: "Password is required",
+          minLength: {
+            value: 6,
+            message: "Password must be at least 6 characters long",
+          },
+          pattern: {
+            value: /^(?=.*[A-Z])(?=.*\d).{6,}$/,
+            message:
+              "Password must contain at least one capital letter and one number",
+          },
+        })}
         error={!!errors.password}
-        helperText={errors.password ? 'Password is required' : ''}
+        helperText={errors.password ? errors.password.message : ""}
       />
 
       <InputField
-        label="Confirm Password"
+        label="Confirm password"
         type="password"
-        {...register('confirmPassword', { required: true })}
-        error={!!errors.confirmPassword}
-        helperText={errors.confirmPassword ? 'Confirm Password is required' : ''}
+        {...register("confirmPassword", {
+          required: "Password is required",
+          minLength: {
+            value: 6,
+            message: "Password must be at least 6 characters long",
+          },
+          pattern: {
+            value: /^(?=.*[A-Z])(?=.*\d).{6,}$/,
+            message:
+              "Password must contain at least one capital letter and one number",
+          },
+        })}
+        error={!!errors.password}
+        helperText={errors.password ? errors.password.message : ""}
       />
 
       <SubmitButton type="submit" variant="contained" disabled={isSubmitting}>
-        {isRegistering ? 'Processing...' : 'Sign Up'}
+        {isRegistering ? "Processing..." : "Sign Up"}
       </SubmitButton>
 
       <Grid container>
         <Grid item>
-          <Link href="/login">
-            {"Already have an account? Sign in"}
-          </Link>
+          <Link href="/login">{"Already have an account? Sign in"}</Link>
         </Grid>
       </Grid>
 
-      {registerError && <ErrorMessage>Registration Error: {JSON.stringify(registerErrorMessage)}</ErrorMessage>}
+      {registerError && (
+        <ErrorMessage>
+          Registration Error: {JSON.stringify(registerErrorMessage)}
+        </ErrorMessage>
+      )}
       {registerData && (
         <SuccessMessage>
           Registration Successful for {registerData.addUser.name}

@@ -11,8 +11,8 @@ export const api = createApi({
     };
     try {
       const data = await request({
-        url:endpoint, 
-        document:arg, 
+        url: endpoint,
+        document: arg,
         requestHeaders: headers,
       });
       return { data };
@@ -39,11 +39,31 @@ export const api = createApi({
         }
       `,
     }),
+    getProduct: builder.query({
+      query: (id) => gql`
+        query {
+          product(id: "${id}"){
+              id
+              title
+              price
+              description
+              images
+              category {
+                id
+                name
+                image
+              }
+          }
+        }
+      `,
+    }),
     getCategories: builder.query({
       query: () => gql`
         query {
           categories {
+            id
             name
+            image
           }
         }
       `,
@@ -96,14 +116,68 @@ export const api = createApi({
         }
       `,
     }),
+    addProduct: builder.mutation({
+      query: ({ title, price, description, categoryId, images }) => {
+        const imagesString = `[${images.map((url:string) => `"${url.replace(/"/g, '\\"')}"`).join(',')}]`;
+        return gql`
+          mutation {
+            addProduct(
+              data: {
+                title: "${title}"
+                price: ${Number(price)}
+                description: "${description}"
+                categoryId: ${Number(categoryId)}
+                images: ${imagesString}
+              }
+            ) {
+              title
+              price
+              images
+              category {
+                id
+                name
+                image
+              }
+            }
+          }
+        `;
+      },
+    }),
+    updateProduct: builder.mutation({
+      query: ({ id, changes }) => gql`
+        mutation {
+          updateProduct(id: "${id}", changes: ${JSON.stringify(changes)}) {
+            title
+            price
+            images
+            category {
+              id
+              name
+              image
+            }
+          }
+        }
+      `,
+    }),
+    deleteProduct: builder.mutation({
+      query: (id) => gql`
+        mutation {
+          deleteProduct(id: ${id})
+        }
+      `,
+    }),
   }),
 });
 
 export const {
   useGetProductsQuery,
+  useGetProductQuery,
   useGetCategoriesQuery,
   useLoginMutation,
   useRegisterMutation,
   useIsEmailAvailableQuery,
   useGetUserProfileQuery,
+  useAddProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
 } = api;

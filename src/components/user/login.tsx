@@ -3,7 +3,6 @@ import { Grid, Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-
 import { useGetUserProfileQuery, useLoginMutation } from "../../services/api";
 import {
   FormContainer,
@@ -15,7 +14,6 @@ import {
 import { LoginFormValues } from "../../types/userTypes";
 import { setUser } from "../../redux/slices/userSlice";
 
-
 function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,8 +22,14 @@ function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>();
-  const [login, { isLoading, isError, error}] = useLoginMutation();
-  const { data: userData, isLoading: isUserLoading, isError: isLadingError, error: profileError, refetch } = useGetUserProfileQuery({});
+  const [login, { isLoading, isError, error }] = useLoginMutation();
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    isError: isLoadingError,
+    error: profileError,
+    refetch,
+  } = useGetUserProfileQuery({});
 
   const onSubmit = async (formData: LoginFormValues) => {
     const response = await login(formData);
@@ -33,8 +37,8 @@ function LoginForm() {
       localStorage.setItem("access_token", response.data.login.access_token);
       localStorage.setItem("refresh_token", response.data.login.refresh_token);
       await refetch();
-      if(userData){
-        console.log(userData);
+      if (userData) {
+        //console.log(userData);
         dispatch(setUser(userData.myProfile));
       }
       navigate("/");
@@ -48,9 +52,15 @@ function LoginForm() {
       <InputField
         label="Email"
         type="email"
-        {...register("email", { required: true })}
+        {...register("email", {
+          required: "Email is required",
+          pattern: {
+            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            message: "Please enter a valid email address",
+          },
+        })}
         error={!!errors.email}
-        helperText={errors.email ? "Email is required" : ""}
+        helperText={errors.email ? errors.email.message : ""}
       />
 
       <InputField
@@ -67,9 +77,7 @@ function LoginForm() {
 
       <Grid container>
         <Grid item>
-          <Link href="/register">
-            {"Don't have an account? Sign Up"}
-          </Link>
+          <Link href="/register">{"Don't have an account? Sign Up"}</Link>
         </Grid>
       </Grid>
 

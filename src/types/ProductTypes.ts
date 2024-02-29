@@ -7,11 +7,20 @@ export interface Product {
   category: Category;
 }
 
+interface Image {
+  image: string;
+}
+
+export interface _Product extends Product {
+  categoryId: string;
+  _images: Array<Image>;
+}
+
 export interface Cart extends Product{
   amount:number;
 }
 
-interface Category {
+export interface Category {
   id:string;
   name:string;
   image:string;
