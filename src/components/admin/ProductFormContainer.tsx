@@ -10,26 +10,28 @@ interface ProductFormContainerProps {
 
 const ProductFormContainer: React.FC<ProductFormContainerProps> = ({ product }) => {
   
-  const [addProductMutation, { isLoading: isAddingProduct }] = useAddProductMutation();
-  const [updateProductMutation, { isLoading: isUpdatingProduct }] = useUpdateProductMutation();
+  const [addProductMutation, { isLoading: isAddingProduct}] = useAddProductMutation();
+  const [updateProductMutation, { isLoading: isUpdatingProduct}] = useUpdateProductMutation();
+
+  interface UpResult {
+    data?: Product; 
+    error?: unknown; 
+  }
 
   const onSubmit = async (data: _Product) => {
     const {_images, ...rest } = data;
     const newImages = _images.map((item) => item.image);
     const _data = { ...rest, images: newImages }
-    try {
-       if (product) {
-        const result = await updateProductMutation({ id: product.id, changes: _data });
-        console.log(result);
+    let result:UpResult;
+    if (product) {
+        //console.log("data:",_data);
+        result = await updateProductMutation({ id: product.id, changes: _data});
       }
       else {
-        console.log("sending:",_data);
-        const result = await addProductMutation(_data);
-        console.log(result);
+        result = await addProductMutation(_data);
       }
-    } catch (error) {
-      alert("Error occurred while submitting the form!");
-      console.error(error);
+    if (result.error){
+        alert(result.error);
     }
   };
 

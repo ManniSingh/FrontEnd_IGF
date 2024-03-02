@@ -144,9 +144,25 @@ export const api = createApi({
       },
     }),
     updateProduct: builder.mutation({
-      query: ({ id, changes }) => gql`
+      query: ({ id, changes }) => {
+        let result = '{';
+        for (const key in changes) {
+          const value = changes[key];
+          let stringValue = typeof value === 'string' ? `"${value}"` : value; 
+          if (key === "price" || key === "categoryId") {
+            stringValue = value; 
+          }
+          if (key === "images") {
+            stringValue = `[${changes[key].map((image:string) => `"${image}"`).join(",")}]`;
+          }
+          result += `${key}:${stringValue}, `;
+        }
+        result = result.slice(0, -2);
+        result += '}';
+        //console.log("sending:",result);
+        return gql`
         mutation {
-          updateProduct(id: "${id}", changes: ${JSON.stringify(changes)}) {
+          updateProduct(id: ${id}, changes: ${result}) {
             title
             price
             images
@@ -157,8 +173,10 @@ export const api = createApi({
             }
           }
         }
-      `,
+      `;
+      }
     }),
+
     deleteProduct: builder.mutation({
       query: (id) => gql`
         mutation {
@@ -181,3 +199,4 @@ export const {
   useUpdateProductMutation,
   useDeleteProductMutation,
 } = api;
+

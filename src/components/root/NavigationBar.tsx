@@ -11,6 +11,7 @@ import { RootState } from "../../redux/store";
 import NavigationMenuItem from "./MenuItem";
 import { setUser } from "../../redux/slices/userSlice";
 import { sortProductsByPrice } from "../../redux/slices/productSlice";
+import ThemeToggle from "./ThemeToggle";
 
 export function NavigationBar() {
   const dispatch = useDispatch();
@@ -45,6 +46,10 @@ export function NavigationBar() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     dispatch(setUser(null));
+    setAnchorElUser(null);
+  };
+
+  const handleSettings = () => {
     setAnchorElUser(null);
   };
 
@@ -96,6 +101,7 @@ export function NavigationBar() {
             LOGO
           </RootTypography>
         </Link>
+        <ThemeToggle />
         <Box sx={{ flexGrow: 1 }} />
         <IconButton size="large" onClick={handleSort}>
           {sorted !== 1 ? <ArrowDownwardIcon color="primary"/> : <ArrowUpwardIcon color = "primary"/>}
@@ -146,6 +152,11 @@ export function NavigationBar() {
                 path="/"
                 handleCloseNavMenu={handleLogout}
               />
+              {userData?.role==="customer" && <NavigationMenuItem
+                page="Admin"
+                path="/admin"
+                handleCloseNavMenu={handleSettings}
+              />}
             </Menu>
           </Box>
         )}
