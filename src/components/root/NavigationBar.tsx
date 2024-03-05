@@ -12,6 +12,7 @@ import NavigationMenuItem from "./MenuItem";
 import { setUser } from "../../redux/slices/userSlice";
 import { sortProductsByPrice } from "../../redux/slices/productSlice";
 import ThemeToggle from "./ThemeToggle";
+import SearchBar from "./SearchBar";
 
 export function NavigationBar() {
   const dispatch = useDispatch();
@@ -102,6 +103,7 @@ export function NavigationBar() {
           </RootTypography>
         </Link>
         <ThemeToggle />
+        <SearchBar />
         <Box sx={{ flexGrow: 1 }} />
         <IconButton size="large" onClick={handleSort}>
           {sorted !== 1 ? <ArrowDownwardIcon color="primary"/> : <ArrowUpwardIcon color = "primary"/>}

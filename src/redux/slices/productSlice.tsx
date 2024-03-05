@@ -6,6 +6,8 @@ interface ProductState {
   selectedProduct: Product | null;
   sorted: number;
   cart: Cart[];
+  currentPage: number;
+  selectedChips: string[];
 }
 
 const initialState: ProductState = {
@@ -13,6 +15,8 @@ const initialState: ProductState = {
   selectedProduct: null,
   sorted: 0,
   cart: [],
+  currentPage: 1,
+  selectedChips: [],
 };
 
 const productSlice = createSlice({
@@ -37,7 +41,9 @@ const productSlice = createSlice({
     },
     addToCart(state, action: PayloadAction<Product>) {
       const clickedItem = action.payload;
-      const isItemInCart = state.cart.find((item) => item.id === clickedItem.id);
+      const isItemInCart = state.cart.find(
+        (item) => item.id === clickedItem.id
+      );
       if (isItemInCart) {
         state.cart = state.cart.map((item) =>
           item.id === clickedItem.id
@@ -56,17 +62,35 @@ const productSlice = createSlice({
           state.cart = state.cart.filter((item) => item.id !== idToRemove);
         } else {
           state.cart = state.cart.map((item) =>
-            item.id === idToRemove
-              ? { ...item, amount: item.amount - 1 }
-              : item
+            item.id === idToRemove ? { ...item, amount: item.amount - 1 } : item
           );
         }
+      }
+    },
+    setCurrentPage(state, action: PayloadAction<number>) {
+      state.currentPage = action.payload;
+    },
+    setSelectedChips(state, action: PayloadAction<string>) {
+      const chip = action.payload;
+      if (state.selectedChips.includes(chip)) {
+        const filteredChips = state.selectedChips.filter((_chip)=>_chip!==chip)
+        state.selectedChips = filteredChips;
+      }
+      else{
+        state.selectedChips.push(chip);
       }
     },
   },
 });
 
 const productReducer = productSlice.reducer;
-export const { setProducts, selectProduct, sortProductsByPrice, addToCart, removeFromCart} =
-  productSlice.actions;
+export const {
+  setProducts,
+  selectProduct,
+  sortProductsByPrice,
+  addToCart,
+  removeFromCart,
+  setCurrentPage,
+  setSelectedChips,
+} = productSlice.actions;
 export default productReducer;

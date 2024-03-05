@@ -39,6 +39,24 @@ export const api = createApi({
         }
       `,
     }),
+    getProductsPage: builder.query({
+      query: (page, limit = 6) => gql`
+        query {
+          products(limit: ${limit}, offset: ${(page - 1) * limit}) {
+            id
+            title
+            price
+            description
+            images
+            category {
+              id
+              name
+              image
+            }
+          }
+        }
+      `,
+    }),
     getProduct: builder.query({
       query: (id) => gql`
         query {
@@ -57,6 +75,25 @@ export const api = createApi({
         }
       `,
     }),
+    searchProduct: builder.query({
+      query: (title) => {
+      return gql`
+        query {
+          products(title: "${title}"){
+              id
+              title
+              price
+              description
+              images
+              category {
+                id
+                name
+                image
+              }
+          }
+        }
+      `},
+    }),
     getCategories: builder.query({
       query: () => gql`
         query {
@@ -67,6 +104,25 @@ export const api = createApi({
           }
         }
       `,
+    }),
+    catProducts: builder.query({
+      query: (id) => {
+      return gql`
+        query {
+          products(categoryId: ${id}){
+              id
+              title
+              price
+              description
+              images
+              category {
+                id
+                name
+                image
+              }
+          }
+        }
+      `},
     }),
     login: builder.mutation({
       query: ({ email, password }) => gql`
@@ -189,8 +245,10 @@ export const api = createApi({
 
 export const {
   useGetProductsQuery,
+  useGetProductsPageQuery,
   useGetProductQuery,
   useGetCategoriesQuery,
+  useCatProductsQuery,
   useLoginMutation,
   useRegisterMutation,
   useIsEmailAvailableQuery,
@@ -198,5 +256,6 @@ export const {
   useAddProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
+  useSearchProductQuery,
 } = api;
 
