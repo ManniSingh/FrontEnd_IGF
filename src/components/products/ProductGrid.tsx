@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Badge, Button, Drawer, IconButton } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
+import { Badge, Button, Drawer } from "@mui/material";
 import { AddShoppingCart } from "@mui/icons-material";
 import { StyledGrid } from "../../styles/products";
 import ProductCard from "./ProductCard";
@@ -10,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Cart } from "../../types/ProductTypes";
 import { setCurrentPage } from "../../redux/slices/productSlice";
+import HomeButton from "../root/HomeButton";
 
 const ProductGrid = () => {
   const products = useSelector((state: RootState) => state.product.products);
@@ -24,7 +24,7 @@ const ProductGrid = () => {
   const goHome = () => {
     dispatch(setCurrentPage(1));
     navigate("/");
-  }
+  };
 
   return (
     <div style={{ position: "relative" }}>
@@ -53,9 +53,7 @@ const ProductGrid = () => {
       </StyledGrid>
 
       <div style={{ position: "fixed", bottom: "20px", right: "20px" }}>
-        <IconButton size="large" onClick={goHome}>
-          <HomeIcon color="primary" />
-        </IconButton>
+        <HomeButton goHome={goHome} />
       </div>
     </div>
   );

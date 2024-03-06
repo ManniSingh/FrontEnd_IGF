@@ -9,9 +9,10 @@ const ThemeToggle: React.FC<ThemeToggleProps> = () => {
   const [isDarkTheme, setIsDarkTheme] = useState(theme === "dark");
 
   const handleThemeChange = () => {
+    const newTheme = isDarkTheme ? "light" : "dark";
     setIsDarkTheme(!isDarkTheme);
-    setTheme(isDarkTheme ? "dark" : "light");
-  };
+    setTheme(newTheme);
+  };  
 
   return (
     <FormControlLabel

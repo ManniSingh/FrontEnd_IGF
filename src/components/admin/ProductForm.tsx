@@ -4,6 +4,7 @@ import { InputField } from "../../styles/login";
 import { Product, Category, _Product } from "../../types/ProductTypes";
 import { useGetCategoriesQuery } from "../../services/api";
 import { LinearProgress } from "@mui/material";
+import ErrorComp from "../root/ErrorComp";
 
 interface ProductFormProps {
   onSubmit: (data: _Product) => void;
@@ -42,10 +43,13 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, product }) => {
       reset();
     }
   }, [product, setValue, clearErrors, reset]);
-  
 
   if (isLoading) {
     return <LinearProgress />;
+  }
+
+  if (isError) {
+    return <ErrorComp error={JSON.stringify(error)} />;
   }
 
   const getCategory = (categoryId: string): Category | null => {
@@ -105,8 +109,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, product }) => {
         error={!!errors.categoryId}
         helperText={errors.categoryId ? "Category ID is required" : ""}
         InputLabelProps={{
-            shrink: !!product?.category,
-          }}
+          shrink: !!product?.category,
+        }}
       />
 
       {fields.map((item, index) => (

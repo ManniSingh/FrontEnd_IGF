@@ -7,10 +7,12 @@ import { setProducts, setSelectedChips } from "../../redux/slices/productSlice";
 import { useNavigate } from "react-router-dom";
 import StyledContainer from "../../styles/container";
 import { RootState } from "../../redux/store";
+import ErrorComp from "../root/ErrorComp";
 
-const HorizontalScrollableChips: React.FC = () => {
+const HorizontalScrollableChips: React.FC = React.memo(() => {
   const selectedChips = useSelector((state: RootState) => state.product.selectedChips);
   const products = useSelector((state: RootState) => state.product.products);
+
   const [skip, setSkip] = useState(true);
   const [catID, setCatID] = useState(-1);
   const { data, isError, isLoading, error } = useGetCategoriesQuery({});
@@ -51,28 +53,30 @@ const HorizontalScrollableChips: React.FC = () => {
     }
   }
 
-
-  console.log("categories.tsx::", selectedChips, catID, catData);
-
-  // useEffect(()=>{
-  //   if(selectedChips.length>0){
-  //     navigate("/alt");
-  //   }else{
-  //     navigate("/");
-  //   }
-  // },[selectedChips, navigate]);
+  useEffect(() => {
+    if (numChips > 0) {
+      navigate("/alt"); 
+    } else {
+      if(!skip){
+        console.log("navigates");
+        navigate("/"); 
+      }
+    }
+  }, [numChips]);
 
   if (isLoading || isCatLoading) {
     return <LinearProgress />;
   }
 
   if (isCatError) {
-    window.alert(catError);
+    return <ErrorComp error={JSON.stringify(catError)}/>
   }
 
   if (isError) {
-    window.alert(error);
+    return <ErrorComp error={JSON.stringify(error)}/>
   }
+
+  console.log("categories.tsx::", selectedChips, catID, catData);
 
   return (
     <StyledContainer style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
@@ -87,6 +91,6 @@ const HorizontalScrollableChips: React.FC = () => {
       ))}
     </StyledContainer>
   );
-};
+});
 
 export default HorizontalScrollableChips;

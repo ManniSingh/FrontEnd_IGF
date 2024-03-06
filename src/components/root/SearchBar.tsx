@@ -4,6 +4,7 @@ import { useSearchProductQuery } from "../../services/api";
 import { useDispatch } from "react-redux";
 import { setProducts } from "../../redux/slices/productSlice";
 import { useNavigate } from "react-router-dom";
+import ErrorComp from "./ErrorComp";
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -22,6 +23,10 @@ const SearchBar = () => {
   const handleSearch = () => {
     setSkip(false);
   };
+
+  if(isError){
+    <ErrorComp error={JSON.stringify(error)}/>
+  }
 
   return (
     <>

@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import ProductFormContainer from "./ProductFormContainer";
-import { useDeleteProductMutation, useGetProductsQuery } from "../../services/api";
+import {
+  useDeleteProductMutation,
+  useGetProductsQuery,
+} from "../../services/api";
 import { Product } from "../../types/ProductTypes";
+import ErrorComp from "../root/ErrorComp";
 
 const Settings: React.FC = () => {
-  const { data: products, isLoading, isError } = useGetProductsQuery({});
-  const [selectedProductId, setSelectedProductId] = useState<string | undefined>("");
+  const { data: products, isLoading, isError, error } = useGetProductsQuery({});
+  const [selectedProductId, setSelectedProductId] = useState<
+    string | undefined
+  >("");
   const [deleteProduct] = useDeleteProductMutation();
 
   const handleDeleteProduct = async () => {
@@ -18,8 +24,8 @@ const Settings: React.FC = () => {
     try {
       const response = await deleteProduct(selectedProductId);
       console.log("Product deleted successfully", response);
-    } catch (error) {
-      console.error("Error deleting product", error);
+    } catch (e) {
+      console.error("Error deleting product");
     }
     setSelectedProductId("");
   };
@@ -30,18 +36,24 @@ const Settings: React.FC = () => {
     }
   }, [products]);
 
-  const handleProductIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleProductIdChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setSelectedProductId(event.target.value);
   };
 
-  const selectedProduct = selectedProductId && products?.products.find((product:Product) => product.id === selectedProductId);
+  const selectedProduct =
+    selectedProductId &&
+    products?.products.find(
+      (product: Product) => product.id === selectedProductId
+    );
 
   return (
     <>
       {isLoading ? (
         <p>Loading products...</p>
       ) : isError ? (
-        <p>Error fetching products</p>
+        <ErrorComp error={JSON.stringify(error)} />
       ) : (
         <>
           <select value={selectedProductId} onChange={handleProductIdChange}>
@@ -51,7 +63,10 @@ const Settings: React.FC = () => {
               </option>
             ))}
           </select>
-          <button onClick={()=>setSelectedProductId("")} disabled={!selectedProductId}>
+          <button
+            onClick={() => setSelectedProductId("")}
+            disabled={!selectedProductId}
+          >
             Clear Selection
           </button>
           {selectedProduct && (

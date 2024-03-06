@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Grid, Link } from "@mui/material";
+import { Grid, LinearProgress, Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -13,6 +13,7 @@ import {
 } from "../../styles/login";
 import { LoginFormValues } from "../../types/userTypes";
 import { setUser } from "../../redux/slices/userSlice";
+import ErrorComp from "../root/ErrorComp";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ function LoginForm() {
   const {
     data: userData,
     isLoading: isUserLoading,
-    isError: isLoadingError,
+    isError: isLoginError,
     error: profileError,
     refetch,
   } = useGetUserProfileQuery({});
@@ -38,12 +39,22 @@ function LoginForm() {
       localStorage.setItem("refresh_token", response.data.login.refresh_token);
       await refetch();
       if (userData) {
-        //console.log(userData);
         dispatch(setUser(userData.myProfile));
       }
       navigate("/");
     }
   };
+
+  if (isError){
+    <ErrorComp error={JSON.stringify(error)}/>
+  }
+  if (isLoginError){
+    <ErrorComp error={JSON.stringify(profileError)}/>
+  }
+
+  if (isLoading || isUserLoading){
+    <LinearProgress />
+  }
 
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>

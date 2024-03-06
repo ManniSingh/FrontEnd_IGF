@@ -1,19 +1,22 @@
 import { IconButton, LinearProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+
 import {
   setCurrentPage,
   setProducts as setStoreProducts,
 } from "../../redux/slices/productSlice";
 import ProductGrid from "./ProductGrid";
 import { useGetProductsPageQuery } from "../../services/api";
-import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { RootState } from "../../redux/store";
+import ErrorComp from "../root/ErrorComp";
 
 function Products() {
   const currentPage = useSelector(
     (state: RootState) => state.product.currentPage
   );
-  const { isLoading, isError, data } = useGetProductsPageQuery(currentPage);
+  const { isLoading, isError, error, data } =
+    useGetProductsPageQuery(currentPage);
   const dispatch = useDispatch();
 
   if (isLoading) {
@@ -21,7 +24,7 @@ function Products() {
   }
 
   if (isError) {
-    return <p>ERROR!!</p>;
+    return <ErrorComp error={JSON.stringify(error)} />;
   }
 
   const handlePreviousPage = () => {
@@ -36,10 +39,8 @@ function Products() {
     }
   };
 
-  //console.log("Page:", currentPage, "data:", data.products.length);
-  if (data) {
-    dispatch(setStoreProducts(data.products));
-  }
+  console.log("Page:", currentPage, "data:", data.products.length);
+  dispatch(setStoreProducts(data.products));
 
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
