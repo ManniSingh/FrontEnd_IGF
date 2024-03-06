@@ -41,19 +41,17 @@ const HorizontalScrollableChips: React.FC = React.memo(() => {
     dispatch(setSelectedChips(chip));
   };
 
-  const numChips = selectedChips.length;
-  if (numChips > 0 && catData) {
-    let collection = catData.products;
-    if (numChips === 1) {
-      console.log("disp 1:");
-      dispatch(setProducts(collection));
-    } else {
-      console.log("disp 2:");
-      dispatch(setProducts([...products, ...collection]));
-    }
-  }
-
   useEffect(() => {
+    const numChips = selectedChips.length;
+    if (catData) {
+      let collection = catData.products;
+      if (numChips === 1) {
+        dispatch(setProducts(collection));
+      } else {
+        console.log("Infinite loop starts:");
+        dispatch(setProducts([...products, ...collection]));
+      }
+    }
     if (numChips > 0) {
       navigate("/alt"); 
     } else {
@@ -62,7 +60,7 @@ const HorizontalScrollableChips: React.FC = React.memo(() => {
         navigate("/"); 
       }
     }
-  }, [numChips]);
+  }, [selectedChips]);
 
   if (isLoading || isCatLoading) {
     return <LinearProgress />;
