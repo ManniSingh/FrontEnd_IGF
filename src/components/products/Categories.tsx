@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Chip, LinearProgress } from "@mui/material";
 import { useCatProductsQuery, useGetCategoriesQuery } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
-import { Category } from "../../types/ProductTypes";
+import { Category, Product } from "../../types/ProductTypes";
 import { setProducts, setSelectedChips } from "../../redux/slices/productSlice";
 import { useNavigate } from "react-router-dom";
 import StyledContainer from "../../styles/container";
 import { RootState } from "../../redux/store";
 import ErrorComp from "../root/ErrorComp";
+import ThemeContext from "../root/ThemeContext";
 
 const HorizontalScrollableChips: React.FC = React.memo(() => {
   const selectedChips = useSelector((state: RootState) => state.product.selectedChips);
-  const products = useSelector((state: RootState) => state.product.products);
-
   const [skip, setSkip] = useState(true);
   const [catID, setCatID] = useState(-1);
+  const [chip, setChip] = useState("");
+  const { theme } = useContext(ThemeContext);
   const { data, isError, isLoading, error } = useGetCategoriesQuery({});
   const {
     data: catData,
@@ -25,6 +26,8 @@ const HorizontalScrollableChips: React.FC = React.memo(() => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [productsDictionary, setProductsDictionary] = useState<{ [key: string]: Product[] }>({});
+
   const chips = data?.categories
     .map((item: { name: string }) => item.name)
     .filter(
@@ -32,37 +35,53 @@ const HorizontalScrollableChips: React.FC = React.memo(() => {
         array.indexOf(chip) === index
     );
 
-  const handleClick = (chip: string) => {
-    const _catID = data.categories.find(
-      (cat: Category) => cat.name === chip
-    ).id;
+  // console.log("categories.tsx::", selectedChips, catID, catData);
+  // console.log("chip:",chip);
+  // console.log("prodDict:",productsDictionary);
+
+  const handleClick = (_chip: string) => {
+    const _catID = data.categories.find((cat: Category) => cat.name === _chip).id;
+    console.log("Clicked:",_catID);
     setSkip(false);
     setCatID(_catID);
-    dispatch(setSelectedChips(chip));
+    setChip(_chip);
+    dispatch(setSelectedChips(_chip)); 
   };
 
   useEffect(() => {
-    const numChips = selectedChips.length;
     if (catData) {
-      let collection = catData.products;
-      if (numChips === 1) {
-        dispatch(setProducts(collection));
-      } else {
-        console.log("Infinite loop starts:");
-        dispatch(setProducts([...products, ...collection]));
-      }
+      console.log("in catData useEffect:", selectedChips);
+      setProductsDictionary(prevState => {
+        const updatedState = { ...prevState };
+        if (updatedState[chip]) {
+          delete updatedState[chip];
+          return updatedState;
+        }
+        return {
+          ...updatedState,
+          [chip]: catData.products
+        };
+      });
     }
-    if (numChips > 0) {
+  }, [catData]);
+  
+  
+  useEffect(() => {
+    const flattenedCollection = Object.values(productsDictionary).flat();
+    dispatch(setProducts(flattenedCollection));
+    if (selectedChips.length > 0) {
       navigate("/alt"); 
     } else {
       if(!skip){
         console.log("navigates");
         navigate("/"); 
+        }
       }
-    }
-  }, [selectedChips]);
+  },[productsDictionary]);
+
 
   if (isLoading || isCatLoading) {
+    console.log("loading");
     return <LinearProgress />;
   }
 
@@ -74,18 +93,23 @@ const HorizontalScrollableChips: React.FC = React.memo(() => {
     return <ErrorComp error={JSON.stringify(error)}/>
   }
 
-  console.log("categories.tsx::", selectedChips, catID, catData);
-
   return (
-    <StyledContainer style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
+    <StyledContainer style={{ overflowX: "auto", whiteSpace: "nowrap", backgroundColor: theme === "light" ? "white" : "black" }}>
       {chips.map((chip: string, index: number) => (
         <Chip
-          key={index}
-          label={chip}
-          variant={selectedChips.includes(chip) ? "filled" : "outlined"}
-          onClick={() => handleClick(chip)}
-          style={{ marginRight: 8, marginBottom: 8, display: "inline-block" }}
-        />
+        key={index}
+        label={chip}
+        variant={selectedChips.includes(chip) ? "filled" : "outlined"}
+        onClick={() => handleClick(chip)}
+        style={{
+          marginRight: 8,
+          marginBottom: 8,
+          display: "inline-block",
+          color: theme === "light" ? "#000" : "#fff", // Set text color explicitly
+          backgroundColor: theme === "light" ? "#fff" : "#000", // Set background color explicitly
+          border: theme === "light" ? "1px solid #000" : "1px solid #fff", // Set border color explicitly
+        }}
+      />      
       ))}
     </StyledContainer>
   );

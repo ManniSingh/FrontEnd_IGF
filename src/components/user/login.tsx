@@ -46,14 +46,15 @@ function LoginForm() {
   };
 
   if (isError){
-    <ErrorComp error={JSON.stringify(error)}/>
+    console.log("Login error");
+    return <ErrorComp error={JSON.stringify(error)}/>
   }
-  if (isLoginError){
-    <ErrorComp error={JSON.stringify(profileError)}/>
-  }
+  // if (isLoginError){
+  //   return <ErrorComp error={JSON.stringify(profileError)}/>
+  // }
 
   if (isLoading || isUserLoading){
-    <LinearProgress />
+    return <LinearProgress />
   }
 
   return (

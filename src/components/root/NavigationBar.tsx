@@ -14,6 +14,7 @@ import { sortProductsByPrice } from "../../redux/slices/productSlice";
 import ThemeToggle from "./ThemeToggle";
 import SearchBar from "./SearchBar";
 
+
 export function NavigationBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

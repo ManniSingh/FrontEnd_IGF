@@ -20,6 +20,7 @@ function RegisterForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>();
   const [
@@ -47,7 +48,6 @@ function RegisterForm() {
     }
   }, [email, recheckEmail]);
 
-  // submitter
   const onSubmit = async (formData: LoginFormValues) => {
     if (isRegistering) return;
 
@@ -68,6 +68,7 @@ function RegisterForm() {
         password: formData.password,
         avatar: "https://api.lorem.space/image/face?w=150&h=220",
       });
+      reset();
     }
   };
 
