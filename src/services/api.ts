@@ -40,7 +40,7 @@ export const api = createApi({
       `,
     }),
     getProductsPage: builder.query({
-      query: (page, limit = 6) => gql`
+      query: (page, limit = 8) => gql`
         query {
           products(limit: ${limit}, offset: ${(page - 1) * limit}) {
             id

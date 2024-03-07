@@ -14,6 +14,7 @@ import {
 import { LoginFormValues } from "../../types/userTypes";
 import { setUser } from "../../redux/slices/userSlice";
 import ErrorComp from "../root/ErrorComp";
+import { useEffect, useState } from "react";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -29,32 +30,33 @@ function LoginForm() {
     isLoading: isUserLoading,
     isError: isLoginError,
     error: profileError,
-    refetch,
-  } = useGetUserProfileQuery({});
+  } = useGetUserProfileQuery({},{ skip: localStorage.getItem("access_token")?false:true });
 
   const onSubmit = async (formData: LoginFormValues) => {
     const response = await login(formData);
     if ("data" in response && "login" in response.data) {
       localStorage.setItem("access_token", response.data.login.access_token);
       localStorage.setItem("refresh_token", response.data.login.refresh_token);
-      await refetch();
-      if (userData) {
-        dispatch(setUser(userData.myProfile));
-      }
-      navigate("/");
     }
   };
 
-  if (isError){
-    console.log("Login error");
-    return <ErrorComp error={JSON.stringify(error)}/>
-  }
-  // if (isLoginError){
-  //   return <ErrorComp error={JSON.stringify(profileError)}/>
-  // }
+  useEffect(() => {
+    if (userData) {
+      dispatch(setUser(userData.myProfile));
+      navigate("/");
+    }
+  }, [userData]);
 
-  if (isLoading || isUserLoading){
-    return <LinearProgress />
+  if (isError) {
+    console.log("Login error");
+    return <ErrorComp error={JSON.stringify(error)} />;
+  }
+  if (isLoginError) {
+    return <ErrorComp error={JSON.stringify(profileError)} />;
+  }
+
+  if (isLoading || isUserLoading) {
+    return <LinearProgress />;
   }
 
   return (
