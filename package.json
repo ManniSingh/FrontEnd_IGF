@@ -2,6 +2,7 @@
   "name": "fs17-fe-project",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://mannisingh.github.io/fs17-Frontend-project/",
   "dependencies": {
     "@apollo/client": "^3.9.5",
     "@emotion/react": "^11.11.3",
