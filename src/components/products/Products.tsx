@@ -39,7 +39,7 @@ function Products() {
     }
   };
 
-  console.log("Page:", currentPage, "data:", data.products.length);
+  // console.log("Page:", currentPage, "data:", data.products.length);
   dispatch(setStoreProducts(data.products));
 
   return (
