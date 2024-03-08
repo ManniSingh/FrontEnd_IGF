@@ -64,7 +64,7 @@ The deployment link is: [https://mannisingh.github.io/fs17-Frontend-project/](ht
 **All Products Page**: Displays a list of all available products.
 - **Product Page**: Shows detailed information about a specific product.
 - **Profile Page**: Accessible only when the user is logged in, providing personalized information and settings.
-- **Cart Page/Modal**: Displays the items added to the cart for purchase.
+- **Cart Modal**: Displays the items added to the cart for purchase.
 
 **Fetching all products**
 - **Finding a single product**
