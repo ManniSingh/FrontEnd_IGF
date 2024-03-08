@@ -1,50 +1,93 @@
-# Frontend project
+# FakeAPI utilisation based demo
 
-This repository for the Frontend project to build an e-commerce website.
 
-## Requirements
+# Table of Contents
+  - [Introduction](#Introduction)
+  - [Deployment](#Deployment)
+  - [Libraries](#Libraries)
+  - [Getting Started](#getting-started)
+  - [Usage](#usage)
+  - [Features](#features)
+  - [API Endpoint](#api-endpoint)
 
-### Basic requirements
+## Introduction
 
-The Front end project must use TypeScript and Redux toolkit.
+This a toy project based on [FakeApi](https://fakeapi.platzi.com/) done for the partial fulfillment of frontend part of fullstack course by Integrify oy. It demonstrates the potential usage of backend interface provided.
 
-1. Use the API endpoint `https://fakeapi.platzi.com/`.
+## Deployment
 
-2. Create at lease 4 pages (can be more if you want): Page for all products, product page, profile page (only available if user logins), and cart page (cart page could be a page or a modal)
+The deployment link is: [https://mannisingh.github.io/fs17-Frontend-project/](https://mannisingh.github.io/fs17-Frontend-project/)
 
-3. Create Redux store for following features:
+## Libraries
 
-   - product reducer: get all products, find a single products, filter products by categories, sort products by price. Create, update and delete a product (enable update & delete features only for admin of the webapp)
-   - user reducer: register and login
-   - cart reducer: add product to cart, remove products, update products's quantity in cart
+- **Redux**: State life cycle is done primarily in redux store.
+- **RTK Query**: API query abstraction layer.
+- **GraphQL**: Accepts queries for resolvers. 
+- **Material-UI**: CSS abstraction layer.
+- **React Hook Form**: Form handling abstraction layer.
+- **Jest**: for the unit testing. 
 
-4. When adding routers to your application, set certain routes to be private. For example, route to user profile page should not be accessible if user has not logged in.
+## Getting started
 
-5. Styling: must have responsive
+1. Clone the repository.
 
-6. Implement unit testing for the reducers
+   ```bash
+   git clone git@github.com:ManniSingh/fs17-Frontend-project.git
 
-7. **Deploy** the application and rewrite README file.
+   ```
 
-### Additional features:
+2. Navigate to the project directory.
 
-- Use Context API to switch theme
-- Use pagination when fetching/displaying all the products
-- Implement performance optimization where applicable
+   ```bash
+   cd fs17-Frontend-project/src
 
-## Grading (1-5)
+   ```
 
-1: Late submission or not complete basic requirements
+3. Install dependencies.
+   ```bash
+   npm install
+   ```
 
-2: Basic requirement + Presentation
+# Usage
 
-3: Folder structure + follow convention(naming convention ,loading, error) + some additional features
+1. To start the App
+   ```bash
+   npm start
+   ```
+2. Use the following command to run tests:
+   ```bash
+   npm run test
+   ```
 
-4: All additional features + reusable logic + custom hook
+# Features
 
-5: UI-UX (for example: send alert when user add same product) + styling (animation or transition, scroll to top) + advanced feature (google log in)
+**All Products Page**: Displays a list of all available products.
+- **Product Page**: Shows detailed information about a specific product.
+- **Profile Page**: Accessible only when the user is logged in, providing personalized information and settings.
+- **Cart Page/Modal**: Displays the items added to the cart for purchase.
 
-## Deadline
+**Fetching all products**
+- **Finding a single product**
+- **Filtering products by categories**
+- **Sorting products by price**
+- **Creating a product** (Admin-only)
+- **Updating a product** (Admin-only)
+- **Deleting a product** (Admin-only)
 
-- Presentation: **7/3** and **8/3/ 2024**
-- Submitting Front-end project **10am 8/3/2024**
+**User**
+- **User registration**
+- **User login**
+- **User profile**
+
+**Cart**
+- **Adding a product to the cart**
+- **Removing a product from the cart**
+- **Updating the quantity of products in the cart**
+
+**Extra**
+-**Server side pagination**
+-**Home button**
+
+## API Endpoint
+
+- [https://api.escuelajs.co/graphql](https://api.escuelajs.co/graphql).
