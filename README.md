@@ -85,8 +85,8 @@ The deployment link is: [https://mannisingh.github.io/fs17-Frontend-project/](ht
 - **Updating the quantity of products in the cart**
 
 **Extra**
--**Server side pagination**
--**Home button**
+- **Server side pagination**
+- **Home button**
 
 ## API Endpoint
 
